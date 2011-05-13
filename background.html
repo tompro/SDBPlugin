@@ -1,0 +1,22 @@
+<html>
+	<head>
+		<script src="js/lib/jquery-1.6.1.min.js"></script>
+		<script src="js/lib/underscore-min.js"></script>
+		<script src="js/lib/sha1.js"></script>
+		<script src="js/lib/aws_sdb.js"></script>
+		<script>
+		
+			function init(){
+				console.log('init Page');
+			}
+			// click on plugin button
+			chrome.browserAction.onClicked.addListener( function(){
+				chrome.tabs.create({url:'ui.html'}, init)
+				//console.log('Click');
+			});
+		</script>
+	</head>
+	<body>
+		
+	</body>
+</html>

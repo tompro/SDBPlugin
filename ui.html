@@ -1,0 +1,110 @@
+<!DOCTYPE html >
+<html>
+	<head>
+		<script src="js/lib/jquery-1.6.1.min.js"></script>
+		<script src="js/lib/underscore-min.js"></script>
+		<script src="js/lib/sha1.js"></script>
+		<script src="js/lib/aws_sdb.js"></script>
+		<script>
+		
+		var awsDomain = "sdb.amazonaws.com";
+		var awsKey = "AKIAJID2PANQYXQWG75Q";
+		var awsSecret = "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";
+		
+		sdb = new SDB(awsKey, awsSecret, awsDomain);
+		
+		sdb.listDomains(function(data){
+			var domainList = $('#sdbDomains');
+			_.each(data.domains, function(item, index){
+				var elem = $('<li>' + item + '</li>');
+				elem.bind('click', function(){
+					var domain = $(this).html();
+					displayDomain(domain);
+				});
+				domainList.append(elem);
+			});
+		})
+		
+		function buildResultTable(data){
+			var cols = {};
+			var table = $('#queryResult');
+			table.html('');
+			var headerRow = $('<tr></tr>');
+			
+			_.each(data, function(item, index){
+				
+				_.each(item.attrs, function(value, key){
+					console.log(key);
+					cols[key]=key;
+				})
+			});
+			
+			_.each(cols, function(value){
+				headerRow.append('<th>'+value+'</th>')
+			});
+			
+			table.append(headerRow);
+			
+			_.each(data, function(item, index){
+				var dataRow = $('<tr></tr>');
+				_.each(cols, function(value){
+					dataRow.append('<td>'+(item.attrs[value] ? item.attrs[value] : '')+'</td>');
+				})
+				table.append(dataRow);
+			});
+		}
+		
+		function displayDomain(name){
+			sdb.select('SELECT * from ' + name, function(data){
+				var queryResultContainer = $('#queryResult');
+				queryResultContainer.html('');
+				buildResultTable(data.items);
+			});
+		}
+		
+		
+		$(function(){
+			$('#doQuery').bind('click', function(){
+				
+				console.log('start query');
+				var query = $('#query').val();
+				
+				sdb.select(query, function(data){
+					buildResultTable(data.items);
+				});
+			});
+		});
+		
+		</script>
+		
+		<style>
+			div{border: 1px solid black;}
+			.clear{clear:both}
+			#left {float:left; overflow: auto; width: 18%; height:800px; display: inline; margin-left: 0;}
+			#queryForm{float:right; width:80%}
+			#preferenceSelector{float:left; width:18%; height:100px;}
+			#query{width:100%; height: 80px}
+			#sdbDomains {list-style: none; margin-left: 0;}
+			#sdbDomains li {margin-left: 0; list-style: none}
+			#queryResultContainer{float:right; overflow: auto; width: 80%}
+		</style>
+	</head>
+	<body>
+		<div id="top">
+			<div id="preferenceSelector"></div>
+			<form id="queryForm">
+			<textarea id="query"></textarea>
+			<input id="doQuery" type="button" value="query" />
+			</form>
+			<div class="clear"></div>
+		</div>
+		<div id="left">
+			<ul id="sdbDomains"></ul>
+		</div>
+		<div id="queryResultContainer">
+			<table id="queryResult"></table>
+		</div>
+		
+		<div class="clear"></div>
+	</body>
+</html>

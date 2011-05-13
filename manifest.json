@@ -1,0 +1,14 @@
+{
+	"name": "SDB Query Browser",
+	"version": "0.1",
+	"description": "Enables simple queries and operations in Amazon SimpleDB",
+	"background_page": "background.html",
+	
+	"browser_action": {
+		"default_icon": "icon.png"
+	},
+	
+	"permissions": [
+	"http://*.amazonaws.com/", "tabs"
+	]
+}
