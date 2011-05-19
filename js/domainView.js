@@ -1,12 +1,16 @@
 app.domainView = (function(){
 	
-	var container, form;
+	var container, model, form;
 	
 	function init(){
 		container = $('#sdbDomains');
+		model = app.domain;
+		model.onChanged(renderDomains);
 	}
 	
 	function renderDomains( data ){
+		
+		container.html('');
 		
 		_.each(data.domains, function(item, index){
 			var elem = $('<li>' + item + '</li>');
@@ -16,7 +20,6 @@ app.domainView = (function(){
 			});
 			container.append(elem);
 		});
-		
 	}
 	
 	return {

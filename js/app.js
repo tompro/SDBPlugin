@@ -8,6 +8,7 @@ var app = (function(){
 		this.settingsEditor.init( this.settings );
 		this.settingsEditor.onSettingsSaved(this.settings.addEntry);
 		this.settingsEditor.onSettingsChanged(this.settings.changeSettings);
+		this.domain.load();
 	}
 	
 	/**
