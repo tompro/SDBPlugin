@@ -5,9 +5,12 @@ var app = (function(){
 	var awsSelect = 'preferenceSelect';
 	
 	function init(){
+		
 		this.settingsEditor.init( this.settings );
 		this.settingsEditor.onSettingsSaved(this.settings.addEntry);
 		this.settingsEditor.onSettingsChanged(this.settings.changeSettings);
+		
+		this.domainView.init();
 		this.domain.load();
 	}
 	

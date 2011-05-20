@@ -11,14 +11,36 @@ app.domain = (function(){
 	}
 	
 	function reload(){
-		console.log('reload domains');
 		sdb.listDomains(loaded);
 	}
 	
 	function loaded(data){
-		console.log('domains loaded in domains');
-		domains = data;
+		domains = data.domains;
 		app.executeCallbacks(onChangedCallbacks, domains);
+	}
+	
+	function addDomain( domainName ){
+		if(domainName != '' && !domainExists(domainName))
+		{
+			sdb.createDomain(domainName, function(){
+				domains.unshift(domainName);
+				app.executeCallbacks(onChangedCallbacks, domains);
+			});
+		}
+	}
+	
+	function deleteDomain( domainName ){
+		if(confirm('Do you really want to delete the domain: ' + domainName + '? All data in this domain will be lost.'))
+		{
+			sdb.deleteDomain(domainName, function(){
+				delete domains[_.indexOf(domains, domainName)];
+				app.executeCallbacks(onChangedCallbacks, domains);
+			});
+		}
+	}
+	
+	function domainExists( domain ){
+		return (_.indexOf(domains, domain) != -1);
 	}
 	
 	function onChanged( callback ){
@@ -29,6 +51,8 @@ app.domain = (function(){
 	
 	return {
 		load: load,
-		onChanged: onChanged
+		onChanged: onChanged,
+		addDomain: addDomain,
+		deleteDomain: deleteDomain	
 	}
 }())

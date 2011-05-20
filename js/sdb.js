@@ -26,11 +26,11 @@ app.sdb = (function(){
 	}
 	
 	function createDomain( domainName, callback ){
-		
+		sdb.createDomain(domainName, callback);
 	}
 	
 	function deleteDomain( domainName, callback){
-		
+		sdb.deleteDomain(domainName, callback);
 	}
 	
 	function onChanged( callback ){

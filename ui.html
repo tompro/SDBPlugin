@@ -19,8 +19,6 @@
 		
 		$(function(){
 			app.init();
-			app.domainView.init();
-			//app.sdb.listDomains(app.domainView.renderDomains);
 		});
 		
 		
@@ -85,9 +83,9 @@
 		<style>
 			div{border: 1px solid black;}
 			.clear{clear:both}
-			#left {float:left; overflow: auto; width: 18%; height:800px; display: inline; margin-left: 0;}
+			#left {float:left; width: 18%; display: inline; margin-left: 0;}
 			#query{width:100%; height: 80px}
-			#sdbDomains {list-style: none; margin-left: 0;}
+			#sdbDomains {list-style: none; margin-left: 0; padding:10px; border: 1px solid black; overflow:auto; height: 600px;}
 			#sdbDomains li {margin-left: 0; list-style: none}
 			#right{float:right; width: 80%}
 		</style>
@@ -102,7 +100,7 @@
 			
 			<form id="editSettings">
 				<ul>
-					<li><label for="settingName">Name:*</label></li>
+					<li><label for="name">Name:*</label></li>
 					<li><input type="text" name="name" /></li>
 					<li><label for="awsKey">AWS Key:*</label></li>
 					<li><input type="text" name="awsKey" /></li>
@@ -111,7 +109,19 @@
 					<li><input type="submit" id="saveSetting" value="save" /></li>
 				</ul>
 			</form>
+			
 			<ul id="sdbDomains"></ul>
+			
+			<form>
+				<label for="domainName">Domain Name:</label><br/>
+				<input type="text" id="domainName" name="domainName" />
+				<input type="submit" id="saveDomain" value="create Domain" />
+			</form>
+			
+			<form class="hiddenDeleteDomain">
+				<input type="submit" id="deleteDomain" value="delete this Domain" />
+			</form>
+			
 		</div>
 		
 		<div id="right">

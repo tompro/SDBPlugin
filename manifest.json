@@ -9,6 +9,6 @@
 	},
 	
 	"permissions": [
-	"http://*.amazonaws.com/", "tabs"
+	"http://*.amazonaws.com/", "tabs", "contextMenus"
 	]
 }
