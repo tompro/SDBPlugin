@@ -4,6 +4,8 @@
 		<meta charset="utf-8" />
 		<title>SDB Query Browser</title>
 		
+		<link rel="stylesheet" media="all" href="css/styles.css" />
+		
 		<script src="js/lib/jquery-1.6.1.min.js"></script>
 		<script src="js/lib/underscore-min.js"></script>
 		<script src="js/lib/sha1.js"></script>
@@ -79,62 +81,71 @@
 		});
 		
 		</script>
-		
-		<style>
-			div{border: 1px solid black;}
-			.clear{clear:both}
-			#left {float:left; width: 18%; display: inline; margin-left: 0;}
-			#query{width:100%; height: 80px}
-			#sdbDomains {list-style: none; margin-left: 0; padding:10px; border: 1px solid black; overflow:auto; height: 600px;}
-			#sdbDomains li {margin-left: 0; list-style: none}
-			#right{float:right; width: 80%}
-		</style>
 	</head>
 	<body>
+		<div id="top"></div>
 		<div id="left">
-			<form id="preferenceEditor">
-				<select id="preferenceSelect" name="preference"></select>
-				<select id="awsRegionSelect" name="awsRegion"></select>
-				<input type="button" id="addSetting" value="Add Setting" />
-			</form>
+			<div class="container">
+				<h3 class="containerHead">Choose your settings</h3>
+				<div class="containerContent">
+					<form id="preferenceEditor">
+						<select id="preferenceSelect" name="preference"></select>
+						<select id="awsRegionSelect" name="awsRegion"></select>
+						<input type="button" id="addSetting" value="Add Setting" />
+					</form>
+				</div>
+			</div>
 			
-			<form id="editSettings">
-				<ul>
-					<li><label for="name">Name:*</label></li>
-					<li><input type="text" name="name" /></li>
-					<li><label for="awsKey">AWS Key:*</label></li>
-					<li><input type="text" name="awsKey" /></li>
-					<li><label for="awsSecret">AWS Secret:*</label></li>
-					<li><input type="text" name="awsSecret" /></li>
-					<li><input type="submit" id="saveSetting" value="save" /></li>
-				</ul>
-			</form>
+			<div class="container settingsContainer">
+				<h3 class="containerHead">Add settings</h3>
+				<div class="containerContent">
+					<form id="editSettings">
+						<ul>
+							<li><label for="name">Name:*</label></li>
+							<li><input type="text" name="name" /></li>
+							<li><label for="awsKey">AWS Key:*</label></li>
+							<li><input type="text" name="awsKey" /></li>
+							<li><label for="awsSecret">AWS Secret:*</label></li>
+							<li><input type="text" name="awsSecret" /></li>
+							<li><input type="submit" id="saveSetting" value="save" /><input type="button" class="cancel" value="cancel"/></li>
+						</ul>
+					</form>
+				</div>
+			</div>
 			
-			<ul id="sdbDomains"></ul>
+			<div class="container">
+				<h3 class="containerHead">Domains</h3>
+					<ul id="sdbDomains" class="containerContent"></ul>
+			</div>
 			
-			<form>
-				<label for="domainName">Domain Name:</label><br/>
-				<input type="text" id="domainName" name="domainName" />
-				<input type="submit" id="saveDomain" value="create Domain" />
-			</form>
-			
-			<form class="hiddenDeleteDomain">
-				<input type="submit" id="deleteDomain" value="delete this Domain" />
-			</form>
-			
+			<div class="container">
+				<h3 class="containerHead">Add Domain</h3>
+				<form class="containerContent">
+					<label for="domainName">Domain Name:</label><br/>
+					<input type="text" id="domainName" name="domainName" />
+					<input type="submit" id="saveDomain" value="create Domain" />
+					<div class="clear"></div>
+				</form>
+			</div>
 		</div>
 		
 		<div id="right">
-			<form id="queryForm">
-				<textarea id="query"></textarea>
-				<input id="doQuery" type="button" value="query" />
-			</form>
+			<div class="container">
+				<h3 class="containerHead">Enter Query</h3>
+				<form id="queryForm" class="containerContent">
+					<textarea id="query"></textarea>
+					<input id="doQuery" type="button" value="Run Query" />
+					<div class="clear"></div>
+				</form>
+			</div>
 			
-			<div id="queryResultContainer">
-				<table id="queryResult"></table>
-			</div>	
+			<div class="container">
+				<h3 class="containerHead">Query Result</h3>
+				<div id="queryResultContainer" class="containerContent">
+					<table id="queryResult"></table>
+				</div>	
+			</div>
 		</div>
-		
 		
 		<div class="clear"></div>
 	</body>

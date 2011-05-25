@@ -1,6 +1,7 @@
 app.domainView = (function(){
 	
-	var container, model, domainFormElement, formButton;
+	var container, model, domainFormElement, formButton, deleteButton;
+	var domainClickedCallbacks = [];
 	
 	function init(){
 		container = $('#sdbDomains');
@@ -13,6 +14,8 @@ app.domainView = (function(){
 			model.addDomain(domainName);
 		});
 		
+		container.find('li').live('click', domainClicked);
+		
 		model = app.domain;
 		model.onChanged(renderDomains);
 	}
@@ -20,20 +23,37 @@ app.domainView = (function(){
 	function renderDomains( domains ){
 		container.html('');
 		_.each(domains, function(item, index){
-			var elem = $('<li class="domain">' + item + '</li>');
-			elem.bind('click', onDomainClicked);
+			var elem = $('<li><span class="domain">' + item + '</span></li>');
 			container.append(elem);
 		});
 	}
 	
-	function onDomainClicked(){
-		var domain = $(this).html();
-		console.log('Domain clicked: ' + domain);
+	function domainClicked(){
+		var domain = $(this);
+		container.find('li').removeClass('active');
+		container.find('#deleteDomain').remove();
+		domain.addClass('active');
+		
+		var deleteButton = $('<a href="#" id="deleteDomain" title="Delete this Domain">X</a>');
+		deleteButton.bind('click', function(){
+			var domainName = $($(this).parent().find('.domain')[0]).html();
+			model.deleteDomain(domainName);
+		});
+		domain.append(deleteButton);
+		
+		app.executeCallbacks(domainClickedCallbacks);
+	}
+	
+	function onDomainClicked( callback ){
+		if(typeof callback == 'function'){
+			domainClickedCallbacks.push(callback);
+		}
 	}
 	
 	return {
 		init: init,
-		renderDomains: renderDomains
+		renderDomains: renderDomains,
+		onDomainClicked: onDomainClicked
 	}
 	
 }())

@@ -1,0 +1,128 @@
+body {
+	background-color: #333;
+	color: #fff;
+	font-family: sans-serif;
+	margin:0;
+	padding:0;
+}
+
+ul {
+	list-style: none;
+	margin-left:0;
+}
+
+label {
+	font-size: .7em;
+}
+
+.container {
+	-webkit-border-radius: 5px;
+	-webkit-box-shadow: 3px 3px 4px #222;
+	background-color: #444;
+	margin: 1em 0 1em 1em;
+}
+
+.containerHead {
+	margin:0;
+	padding:.3em .3em .3em .7em;
+	-webkit-border-radius: 5px 5px 0 0;
+	background-color: #222;
+	font-size: medium;
+}
+
+.containerContent {
+	padding: .5em;
+}
+
+.clear{
+	clear:both;
+}
+
+.active {
+	background-color:#222;
+	font-weight: bold;
+	 
+}
+
+.cancel {
+	float:right;
+}
+
+#top {
+	height: 40px;
+	background-color: #222;
+}
+
+#left {
+	float:left; 
+	width: 320px; 
+	display: inline; 
+	margin-left: 0;
+}
+
+#editSettings ul {
+	padding: 0;
+	margin:0;
+}
+
+input[type=text] {
+	width:98%;
+	background-color: #ccc;
+}
+
+#query{
+	width:100%; 
+	height: 80px;
+	background-color: #ccc;
+	border-color: #222222;
+	margin-right:1em;
+}
+
+#queryResult {
+	height: 650px;
+}
+
+#sdbDomains {
+	padding: 10px 0 10px 0; 
+	overflow:auto; 
+	height: 600px;
+}
+
+#sdbDomains li {
+	margin-left: 0;
+	padding: .3em .5em .3em .5em;
+	display: block;
+	cursor: pointer;
+}
+
+#sdbDomains li:hover {
+	background-color: #222;
+}
+
+#sdbDomains .active {
+	padding-top: .8em;
+	padding-bottom: .8em;
+}
+
+#deleteDomain {
+	-webkit-border-radius: 3px;
+	border: 1px solid #222222;
+	background-color:#ff0000;
+	text-decoration: none; 
+	color: white;
+	font-weight: bold; 
+	font-family: sans-serif;
+	padding: .2em .5em .2em .5em;
+	margin-top: -.2em;
+	float: right;
+}
+
+#saveDomain, #doQuery {
+	float:right;
+}
+
+#right{
+	float:left; 
+	width: 1000px;
+}
+			

@@ -17,10 +17,11 @@ app.settingsEditor = (function(){
 		addSettingsButton = $('#addSetting');
 		saveButton = $('#saveSetting');
 		
+		
 		initConfigChooser();
 		initRegionChooser();
 		setupButtons();
-		editForm.hide();
+		$('.settingsContainer').hide();
 		
 		settings.onChanged(initConfigChooser);
 	}
@@ -31,7 +32,11 @@ app.settingsEditor = (function(){
 	function setupButtons(){
 		
 		addSettingsButton.bind('click', function(){
-			editForm.slideDown('medium');
+			$('.settingsContainer').slideDown('medium');
+		});
+		
+		editForm.find('.cancel').bind('click', function(){
+			$('.settingsContainer').slideUp('medium');
 		});
 		
 		saveButton.bind('click', function(event){
@@ -57,7 +62,7 @@ app.settingsEditor = (function(){
 					item.value = '';
 				}
 			});
-			editForm.slideUp();
+			$('.settingsContainer').slideUp('medium');
 			app.executeCallbacks(settingsSavedCallbacks, data);
 		});
 		
