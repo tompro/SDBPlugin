@@ -10,12 +10,10 @@
 		<script src="js/lib/underscore-min.js"></script>
 		<script src="js/lib/sha1.js"></script>
 		<script src="js/lib/aws_sdb.js"></script>
+		
 		<script src="js/app.js"></script>
-		<script src="js/settings.js"></script>
-		<script src="js/settingsEditor.js"></script>
-		<script src="js/sdb.js"></script>
-		<script src="js/domain.js"></script>
-		<script src="js/domainView.js"></script>
+		<script src="js/models.js"></script>
+		<script src="js/views.js"></script>
 		
 		<script>
 		
@@ -30,35 +28,7 @@
 		
 		sdb = new SDB(awsKey, awsSecret, awsDomain);
 		
-		function buildResultTable(data){
-			var cols = {};
-			var table = $('#queryResult');
-			table.html('');
-			var headerRow = $('<tr></tr>');
-			
-			_.each(data, function(item, index){
-				
-				_.each(item.attrs, function(value, key){
-					console.log(key);
-					cols[key]=key;
-				})
-			});
-			
-			_.each(cols, function(value){
-				headerRow.append('<th>'+value+'</th>')
-			});
-			
-			table.append(headerRow);
-			
-			_.each(data, function(item, index){
-				var dataRow = $('<tr></tr>');
-				_.each(cols, function(value){
-					dataRow.append('<td>'+(item.attrs[value] ? item.attrs[value] : '')+'</td>');
-				})
-				table.append(dataRow);
-			});
-		}
-		
+
 		function displayDomain(name){
 			sdb.select('SELECT * from ' + name, function(data){
 				var queryResultContainer = $('#queryResult');

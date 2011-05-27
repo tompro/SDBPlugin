@@ -1,3 +1,6 @@
+/**
+ * model for settings
+ */
 app.settings = (function(){
 	
 	var settings, selectedIndex, selectedRegion, controller;
@@ -209,4 +212,160 @@ app.settings = (function(){
 		getSelectedIndex: getSelectedIndex,
 		getSelectedRegionKey: getSelectedRegionKey
 	};
-}())
+}());
+
+/**
+ * wrapper for sdb connector
+ */
+app.sdb = (function(){
+	
+	var sdb, awsDomain, awsKey, awsSecret, sdb, queryResult;
+	var settings = app.settings;
+	var onChangedCallbacks = [];
+	
+	function init(){
+		settings.onChanged(initSDB);
+		initSDB();
+	}
+	
+	function initSDB(){
+		var settingsObject = settings.getSelectedEntry();
+		awsKey = settingsObject.awsKey;
+		awsSecret = settingsObject.awsSecret;
+		awsDomain = settings.getSelectedRegion();
+		
+		console.log('Init SDB with Domain: ' + awsDomain);
+		sdb = new SDB(awsKey, awsSecret, awsDomain);
+		app.executeCallbacks(onChangedCallbacks);
+	}
+	
+	function listDomains( callback ){
+		sdb.listDomains(callback);
+	}
+	
+	function createDomain( domainName, callback ){
+		sdb.createDomain(domainName, callback);
+	}
+	
+	function deleteDomain( domainName, callback){
+		sdb.deleteDomain(domainName, callback);
+	}
+	
+	function onChanged( callback ){
+		if(typeof callback == 'function'){
+			onChangedCallbacks.push(callback);
+		}
+	}
+	
+	function select( query, callback ){
+		sdb.select(query, callback);
+	}
+	
+	init();
+	
+	return {
+		onChanged: onChanged,
+		listDomains: listDomains,
+		createDomain: createDomain,
+		deleteDomain: deleteDomain,
+		select: select
+	};
+	
+}());
+
+/**
+ * model for domains
+ */
+app.domain = (function(){
+	
+	var onChangedCallbacks = [];
+	var sdb = app.sdb;
+	var domains = [];
+	
+	
+	function load(){
+		sdb.listDomains(loaded);
+		sdb.onChanged(reload);
+	}
+	
+	function reload(){
+		sdb.listDomains(loaded);
+	}
+	
+	function loaded(data){
+		domains = data.domains;
+		app.executeCallbacks(onChangedCallbacks, domains);
+	}
+	
+	function addDomain( domainName ){
+		if(domainName != '' && !domainExists(domainName))
+		{
+			sdb.createDomain(domainName, function(){
+				domains.unshift(domainName);
+				app.executeCallbacks(onChangedCallbacks, domains);
+			});
+		}
+	}
+	
+	function deleteDomain( domainName ){
+		if(confirm('Do you really want to delete the domain: ' + domainName + '? All data in this domain will be lost.'))
+		{
+			sdb.deleteDomain(domainName, function(){
+				delete domains[_.indexOf(domains, domainName)];
+				app.executeCallbacks(onChangedCallbacks, domains);
+			});
+		}
+	}
+	
+	function domainExists( domain ){
+		return (_.indexOf(domains, domain) != -1);
+	}
+	
+	function onChanged( callback ){
+		if(typeof callback == 'function'){
+			onChangedCallbacks.push(callback);
+		}
+	}
+	
+	return {
+		load: load,
+		onChanged: onChanged,
+		addDomain: addDomain,
+		deleteDomain: deleteDomain	
+	}
+}());
+
+/**
+ * model for query results
+ */
+app.queryResult = (function(){
+	
+	var sdb = app.sdb;
+	var result = {};
+	var onChangedCallbacks = [];
+	
+	function reset(){
+		queryResult({});
+	}
+	
+	function query( query ){
+		sdb.select(query, queryResult);
+	}
+	
+	function queryResult( data ){
+		result = data;
+		console.log(result);
+		app.executeCallbacks(onChangedCallbacks, result.items);
+	}
+	
+	function onChanged( callback ){
+		if(typeof callback == 'function'){
+			onChangedCallbacks.push(callback);
+		}
+	}
+	
+	return {
+		onChanged: onChanged,
+		query: query
+	};
+}());

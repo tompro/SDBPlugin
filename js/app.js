@@ -6,12 +6,20 @@ var app = (function(){
 	
 	function init(){
 		
-		this.settingsEditor.init( this.settings );
-		this.settingsEditor.onSettingsSaved(this.settings.addEntry);
-		this.settingsEditor.onSettingsChanged(this.settings.changeSettings);
+		this.settingsView.init( this.settings );
+		this.settingsView.onSettingsSaved(this.settings.addEntry);
+		this.settingsView.onSettingsChanged(this.settings.changeSettings);
 		
 		this.domainView.init();
 		this.domain.load();
+		this.queryView.init();
+		this.queryResultView.init();
+
+		this.domainView.onDomainClicked(function( domainName ){
+			app.queryResult.query(
+				'select * from ' + domainName
+			);
+		});
 	}
 	
 	/**

@@ -78,8 +78,14 @@ input[type=text] {
 	margin-right:1em;
 }
 
-#queryResult {
+#queryResultContainer {
 	height: 650px;
+	overflow: auto;
+}
+
+th, dt  {
+	width:90px;
+	overflow: hidden;
 }
 
 #sdbDomains {
