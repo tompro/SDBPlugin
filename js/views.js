@@ -1,3 +1,39 @@
+app.menuView = (function(){
+	
+	var domainForm, addDomainMenu;
+	
+	function init(){
+		addDomainMenu = $('#addDomain');
+		addDomainMenu.bind('click', function(event){
+			event.preventDefault();
+			$('.domainFormContainer').slideDown('medium');
+		});
+	}
+	
+	return {
+		init: init
+	};
+	
+}());
+
+app.containerView = (function(){
+	
+	var closeButonClass = 'closeContainer';
+	var containerClass = 'container';
+	
+	function init(){
+		$('.'+closeButonClass).bind('click', function(event){
+			event.preventDefault();
+			$(this).parents('.'+containerClass).slideUp('medium');
+		});
+	}
+	
+	return {
+		init: init
+	};
+	
+}());
+
 /**
  * 
  * view for domain listing
@@ -18,6 +54,8 @@ app.domainView = (function(){
 			var domainName = domainFormElement.val();
 			model.addDomain(domainName);
 		});
+		
+		$('.domainFormContainer').hide();
 		
 		container.find('li').live('click', domainClicked);
 		
@@ -103,10 +141,6 @@ app.settingsView = (function(){
 		
 		addSettingsButton.bind('click', function(){
 			$('.settingsContainer').slideDown('medium');
-		});
-		
-		editForm.find('.cancel').bind('click', function(){
-			$('.settingsContainer').slideUp('medium');
 		});
 		
 		saveButton.bind('click', function(event){
@@ -213,11 +247,16 @@ app.settingsView = (function(){
  */
 app.queryResultView = (function(){
 	
-	var table, model;
+	var table, tableHead, tableBody, model;
 	var columns = [];
 	
 	function init(){
 		table = $('#queryResult');
+		tableHead = $('<thead></thead>');
+		tableBody = $('<tbody></tbody>');
+		table.append(tableHead);
+		table.append(tableBody);
+		
 		model = app.queryResult;
 		model.onChanged(buildResultTable);
 	}
@@ -242,10 +281,11 @@ app.queryResultView = (function(){
 	 */
 	function renderTableHead(){
 		var head = $('<tr></tr>');
+		head.append('<th><div>Item Name</div></th>');
 		_.each(columns, function(value){
-			head.append('<th>' + value + '</th>');
+			head.append('<th><div>' + value + '</div></th>');
 		});
-		table.append(head);
+		tableHead.append(head);
 	}
 	
 	/**
@@ -253,10 +293,13 @@ app.queryResultView = (function(){
 	 */
 	function renderResultRow( item ){
 		var row = $('<tr></tr>');
+		
+		row.append('<td><div title="'+item.name+'">'+item.name+'</div></td>');
+		
 		_.each(columns, function(name){
-			row.append('<td>'+(item.attrs[name] ? item.attrs[name] : '')+'</td>');
+			row.append('<td><div title="'+(item.attrs[name] ? item.attrs[name] : '')+'">'+(item.attrs[name] ? item.attrs[name] : '')+'</div></td>');
 		});
-		table.append(row);
+		tableBody.append(row);
 	}
 	
 	/**
@@ -276,7 +319,9 @@ app.queryResultView = (function(){
 	
 	function clearTable(){
 		columns = [];
-		table.html('');
+		tableHead.html('');
+		tableBody.html('');
+		//table.html('');
 	}
 	
 	return {

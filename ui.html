@@ -21,53 +21,16 @@
 			app.init();
 		});
 		
-		
-		var awsDomain = "sdb.amazonaws.com";
-		var awsKey = "AKIAJID2PANQYXQWG75Q";
-		var awsSecret = "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";
-		
-		sdb = new SDB(awsKey, awsSecret, awsDomain);
-		
-
-		function displayDomain(name){
-			sdb.select('SELECT * from ' + name, function(data){
-				var queryResultContainer = $('#queryResult');
-				queryResultContainer.html('');
-				buildResultTable(data.items);
-			});
-		}
-		
-		
-		$(function(){
-			$('#doQuery').bind('click', function(){
-				
-				console.log('start query');
-				var query = $('#query').val();
-				
-				sdb.select(query, function(data){
-					buildResultTable(data.items);
-				});
-			});
-		});
-		
 		</script>
 	</head>
 	<body>
-		<div id="top"></div>
+		<div id="top">
+			<a id="addSetting" href="#" class="button addSetting" title="addSettings"></a>
+			<a id="addDomain" href="#" class="button addDomain" title="add Domain"></a>
+		</div>
 		<div id="left">
-			<div class="container">
-				<h3 class="containerHead">Choose your settings</h3>
-				<div class="containerContent">
-					<form id="preferenceEditor">
-						<select id="preferenceSelect" name="preference"></select>
-						<select id="awsRegionSelect" name="awsRegion"></select>
-						<input type="button" id="addSetting" value="Add Setting" />
-					</form>
-				</div>
-			</div>
-			
 			<div class="container settingsContainer">
-				<h3 class="containerHead">Add settings</h3>
+				<h3 class="containerHead">Add settings<a href="#" class="closeContainer" title="close">X</a></h3>
 				<div class="containerContent">
 					<form id="editSettings">
 						<ul>
@@ -77,8 +40,29 @@
 							<li><input type="text" name="awsKey" /></li>
 							<li><label for="awsSecret">AWS Secret:*</label></li>
 							<li><input type="text" name="awsSecret" /></li>
-							<li><input type="submit" id="saveSetting" value="save" /><input type="button" class="cancel" value="cancel"/></li>
+							<li><input type="submit" id="saveSetting" value="save" /></li>
 						</ul>
+						<div class="clear"></div>
+					</form>
+				</div>
+			</div>
+			
+			<div class="container domainFormContainer">
+				<h3 class="containerHead">Add Domain<a href="#" class="closeContainer" title="close">X</a></h3>
+				<form class="containerContent">
+					<label for="domainName">Domain Name:</label><br/>
+					<input type="text" id="domainName" name="domainName" />
+					<input type="submit" id="saveDomain" value="create Domain" />
+					<div class="clear"></div>
+				</form>
+			</div>
+			
+			<div class="container">
+				<h3 class="containerHead">Choose your settings</h3>
+				<div class="containerContent">
+					<form id="preferenceEditor">
+						<select id="preferenceSelect" name="preference"></select>
+						<select id="awsRegionSelect" name="awsRegion"></select>
 					</form>
 				</div>
 			</div>
@@ -88,15 +72,6 @@
 					<ul id="sdbDomains" class="containerContent"></ul>
 			</div>
 			
-			<div class="container">
-				<h3 class="containerHead">Add Domain</h3>
-				<form class="containerContent">
-					<label for="domainName">Domain Name:</label><br/>
-					<input type="text" id="domainName" name="domainName" />
-					<input type="submit" id="saveDomain" value="create Domain" />
-					<div class="clear"></div>
-				</form>
-			</div>
 		</div>
 		
 		<div id="right">
@@ -112,7 +87,8 @@
 			<div class="container">
 				<h3 class="containerHead">Query Result</h3>
 				<div id="queryResultContainer" class="containerContent">
-					<table id="queryResult"></table>
+					<table id="queryResult">
+					</table>
 				</div>	
 			</div>
 		</div>

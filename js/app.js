@@ -14,7 +14,9 @@ var app = (function(){
 		this.domain.load();
 		this.queryView.init();
 		this.queryResultView.init();
-
+		this.menuView.init();
+		this.containerView.init();
+		
 		this.domainView.onDomainClicked(function( domainName ){
 			app.queryResult.query(
 				'select * from ' + domainName
