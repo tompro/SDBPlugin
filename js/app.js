@@ -16,6 +16,7 @@ var app = (function(){
 		this.queryResultView.init();
 		this.menuView.init();
 		this.containerView.init();
+		this.itemFormView.init();
 		
 		this.domainView.onDomainClicked(function( domainName ){
 			app.queryResult.query(

@@ -343,6 +343,9 @@ app.queryResult = (function(){
 	var sdb = app.sdb;
 	var result = {};
 	var onChangedCallbacks = [];
+	var selectionChangedCallbacks = [];
+	
+	var selected;
 	
 	function reset(){
 		queryResult({});
@@ -364,8 +367,34 @@ app.queryResult = (function(){
 		}
 	}
 	
+	function onSelectionChanged( callback ){
+		if(typeof callback == 'function'){
+			selectionChangedCallbacks.push(callback);
+		}
+	}
+	
+	function selectItem( name ){
+		_.each(result.items, function( item, index ){
+			if(name == item.name){
+				selected = index;
+				app.executeCallbacks(selectionChangedCallbacks, getSelectedItem());
+			}
+		});
+	}
+	
+	function getSelectedItem(){
+		if(selected !== null && selected !== undefined){
+			if(result.items && result.items[selected]){
+				return result.items[selected];
+			}
+		}
+	}
+	
 	return {
 		onChanged: onChanged,
-		query: query
+		query: query,
+		selectItem: selectItem,
+		getSelectedItem: getSelectedItem,
+		onSelectionChanged: onSelectionChanged
 	};
 }());

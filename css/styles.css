@@ -42,9 +42,17 @@ label {
 
 .button {
 	margin:4px 0 0 .7em;
-	height:32px;
-	width: 32px;
+	height:40px;
+	width: 40px;
 	display: inline-block;
+	background-color: #444;
+	background-position: center center;
+	background-repeat: no-repeat;
+	-webkit-border-radius: 3px;
+}
+
+.button:hover {
+	background-color: #666;
 }
 
 .button.addSetting{
@@ -66,8 +74,10 @@ label {
 }
 
 #top {
-	height: 40px;
-	background-color: #222;
+	padding-top:3px;
+	height: 52px;
+	background-color: #111;
+	-webkit-box-shadow: 3px 3px 4px #222;
 }
 
 #left {

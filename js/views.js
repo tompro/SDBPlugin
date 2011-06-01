@@ -1,7 +1,13 @@
+/**
+ * top menu view
+ */
 app.menuView = (function(){
 	
 	var domainForm, addDomainMenu;
 	
+	/**
+	 * init this view
+	 */
 	function init(){
 		addDomainMenu = $('#addDomain');
 		addDomainMenu.bind('click', function(event){
@@ -16,11 +22,17 @@ app.menuView = (function(){
 	
 }());
 
+/**
+ * controlls hideable container views
+ */
 app.containerView = (function(){
 	
 	var closeButonClass = 'closeContainer';
 	var containerClass = 'container';
 	
+	/**
+	 * init this view
+	 */
 	function init(){
 		$('.'+closeButonClass).bind('click', function(event){
 			event.preventDefault();
@@ -44,6 +56,9 @@ app.domainView = (function(){
 	var container, model, domainFormElement, formButton, deleteButton;
 	var domainClickedCallbacks = [];
 	
+	/**
+	 * init this view
+	 */
 	function init(){
 		container = $('#sdbDomains');
 		domainFormElement = $('#domainName');
@@ -63,6 +78,9 @@ app.domainView = (function(){
 		model.onChanged(renderDomains);
 	}
 	
+	/**
+	 * renders all domains as list
+	 */
 	function renderDomains( domains ){
 		container.html('');
 		_.each(domains, function(item, index){
@@ -71,6 +89,9 @@ app.domainView = (function(){
 		});
 	}
 	
+	/**
+	 * domain clicked event handler
+	 */
 	function domainClicked(){
 		var domain = $(this);
 		var domainName = $(domain.find('.domain')[0]).html();
@@ -87,6 +108,9 @@ app.domainView = (function(){
 		app.executeCallbacks(domainClickedCallbacks, domainName);
 	}
 	
+	/**
+	 * adds eventhandler for domain item clicks
+	 */
 	function onDomainClicked( callback ){
 		if(typeof callback == 'function'){
 			domainClickedCallbacks.push(callback);
@@ -250,12 +274,17 @@ app.queryResultView = (function(){
 	var table, tableHead, tableBody, model;
 	var columns = [];
 	
+	/**
+	 * initialize this view
+	 */
 	function init(){
 		table = $('#queryResult');
 		tableHead = $('<thead></thead>');
 		tableBody = $('<tbody></tbody>');
 		table.append(tableHead);
 		table.append(tableBody);
+		
+		$('tbody tr').live('click', selectItem);
 		
 		model = app.queryResult;
 		model.onChanged(buildResultTable);
@@ -292,8 +321,7 @@ app.queryResultView = (function(){
 	 * renders a single result row
 	 */
 	function renderResultRow( item ){
-		var row = $('<tr></tr>');
-		
+		var row = $('<tr id="' + item.name + '"></tr>');
 		row.append('<td><div title="'+item.name+'">'+item.name+'</div></td>');
 		
 		_.each(columns, function(name){
@@ -317,11 +345,18 @@ app.queryResultView = (function(){
 		});
 	}
 	
+	/**
+	 * clears the complete table view
+	 */
 	function clearTable(){
 		columns = [];
 		tableHead.html('');
 		tableBody.html('');
-		//table.html('');
+	}
+	
+	function selectItem( event ){
+		var itemName = $(event.currentTarget).attr('id');
+		model.selectItem(itemName);
 	}
 	
 	return {
@@ -338,6 +373,9 @@ app.queryView = (function(){
 	
 	var queryEditor, queryButton, model;
 	
+	/**
+	 * setup this view
+	 */
 	function init(){
 		queryEditor = $('#query');
 		queryButton = $('#doQuery');
@@ -358,6 +396,9 @@ app.queryView = (function(){
 		model = app.queryResult;
 	}
 	
+	/**
+	 * run a query
+	 */
 	function doQuery(){
 		
 		var queryString = queryEditor.val();
@@ -370,3 +411,55 @@ app.queryView = (function(){
 		init: init
 	};
 }());
+
+/**
+ * form view for editing items
+ */
+app.itemFormView = (function(){
+	
+	var model, container, form;
+	
+	
+	function show( item ){
+		generateForm(item);
+		container.show();
+		
+		// fix
+		$('#queryResult').hide();
+	}
+	
+	function hide(){
+		
+	}
+	
+	function generateForm( item ){
+		container.html('');
+		var form = $('<form></form>');
+		
+		_.each(item.attrs, function(value, name){
+			var attributeContainer = $('<div></div>');
+			var label = $('<label>' + name + '</label><br/>');
+			attributeContainer.append(label);
+			_.each(value, function(valueItem, index){
+				var input = $('<input type="text" name="' + name + index + '" value="' + valueItem + '" /><br/>');
+				attributeContainer.append(input);
+			});
+			form.append(attributeContainer);
+		});
+		
+		form.append('<input type="button" name="saveItem" value="save changes" />');
+		container.append(form);
+	}
+	
+	function init(){
+		model = app.queryResult;
+		model.onSelectionChanged(show);
+		container = $('#itemFormContainer');
+	}
+	
+	return {
+		init: init
+	}
+	
+}());
+
