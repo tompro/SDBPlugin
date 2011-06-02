@@ -17,6 +17,77 @@ label {
 	font-size: .7em;
 }
 
+#sdbDomains {
+	padding: 10px 0 10px 0; 
+	overflow:auto; 
+	height: 700px;
+}
+
+#sdbDomains li {
+	margin-left: 0;
+	padding: .3em .5em .3em .5em;
+	display: block;
+	cursor: pointer;
+}
+
+#sdbDomains li:hover {
+	background-color: #222;
+}
+
+#sdbDomains .active {
+	padding-top: .8em;
+	padding-bottom: .8em;
+}
+
+#saveDomain, #doQuery {
+	float:right;
+}
+
+#right{
+	float:left;
+	max-width:83%;
+	min-width: 70%;
+}
+
+
+#left {
+	float:left; 
+	min-width: 200px;
+	width: 15%; 
+	display: inline; 
+	margin-left: 0;
+}
+
+#editSettings ul {
+	padding: 0;
+	margin:0;
+}
+
+#query{
+	width:100%; 
+	height: 80px;
+	background-color: #ccc;
+	border-color: #222222;
+	margin-right:1em;
+}
+
+#queryResultContainer {
+	padding:0;
+	height: 650px;
+	overflow: auto;
+}
+
+#saveSetting {
+	float:right;
+}
+
+#top {
+	padding-top:3px;
+	height: 52px;
+	background-color: #111;
+	-webkit-box-shadow: 3px 3px 4px #222;
+}
+
 .container {
 	-webkit-border-radius: 5px;
 	-webkit-box-shadow: 3px 3px 4px #222;
@@ -69,46 +140,9 @@ label {
 	 
 }
 
-#saveSetting {
-	float:right;
-}
-
-#top {
-	padding-top:3px;
-	height: 52px;
-	background-color: #111;
-	-webkit-box-shadow: 3px 3px 4px #222;
-}
-
-#left {
-	float:left; 
-	width: 320px; 
-	display: inline; 
-	margin-left: 0;
-}
-
-#editSettings ul {
-	padding: 0;
-	margin:0;
-}
-
 input[type=text] {
 	width:98%;
 	background-color: #ccc;
-}
-
-#query{
-	width:100%; 
-	height: 80px;
-	background-color: #ccc;
-	border-color: #222222;
-	margin-right:1em;
-}
-
-#queryResultContainer {
-	padding:0;
-	height: 650px;
-	overflow: auto;
 }
 
 .closeContainer {
@@ -158,47 +192,85 @@ tr:hover {
 	background-color: #111111;
 }
 
-#sdbDomains {
-	padding: 10px 0 10px 0; 
-	overflow:auto; 
-	height: 700px;
-}
-
-#sdbDomains li {
-	margin-left: 0;
-	padding: .3em .5em .3em .5em;
-	display: block;
+tr {
 	cursor: pointer;
 }
 
-#sdbDomains li:hover {
-	background-color: #222;
-}
-
-#sdbDomains .active {
-	padding-top: .8em;
-	padding-bottom: .8em;
-}
-
-#deleteDomain {
+.abutton {
 	-webkit-border-radius: 3px;
 	border: 1px solid #222222;
-	background-color:#ff0000;
 	text-decoration: none; 
 	color: white;
 	font-weight: bold; 
 	font-family: sans-serif;
+	cursor: pointer;
 	padding: .2em .5em .2em .5em;
 	margin-top: -.2em;
+}
+
+.delete {
+	background-color:#ff0000;
+}
+
+.add {
+	background-color: #007700;
+}
+
+.back {
+	background-color: #444;
+	padding-top: 0.4em;
+	padding-bottom: 0.4em;
+}
+
+.deleteDomain {
 	float: right;
 }
 
-#saveDomain, #doQuery {
-	float:right;
+.attributeForm {
+	margin: .5em 1em .5em 1em;
+	padding: 0 .4em 0 1em;
+	border: 1px solid #111;
+	-webkit-border-radius: 5px;
+	background-color: #333;
 }
 
-#right{
-	float:left; 
-	width: 1000px;
+.attributeForm label {
+	font-size: 1em;
+	font-weight: bold;
+}
+
+.attributeFormHeader {
+	margin: 0.5em 0 .5em .5em;
+}
+
+.attributeFormHeader .abutton {
+	float: right;
+}
+
+#itemFormContainer .menu .delete {
+	float: right;
+}
+
+#itemFormContainer input[type=text] {
+	margin: .3em 1em .3em 1em;
+	width:80%;
+}
+
+#itemFormContainer .abutton {
+	margin-left: .5em;
+}
+
+#itemFormContainer h3 {
+	font-size: 1em;
+}
+
+#itemFormContainer .menu {
+	height: 1.5em;
+	height: 2em;
+	padding: 1em .5em 0 .5em;
+	background-color: #333;
+	margin: 0 1em 1em 1em;
+	border: 1px solid #111;
+	-webkit-border-radius: 0 0 5px 5px;
 }
 			

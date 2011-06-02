@@ -100,7 +100,7 @@ app.domainView = (function(){
 		container.find('#deleteDomain').remove();
 		domain.addClass('active');
 		
-		var deleteButton = $('<a href="#" id="deleteDomain" title="Delete this Domain">X</a>');
+		var deleteButton = $('<a href="#" class="abutton delete deleteDomain" id="deleteDomain" title="Delete this Domain">X</a>');
 		deleteButton.bind('click', function(){
 			model.deleteDomain(domainName);
 		});
@@ -417,48 +417,91 @@ app.queryView = (function(){
  */
 app.itemFormView = (function(){
 	
-	var model, container, form;
+	var model, container, form, queryResultContainer;
 	
-	
-	function show( item ){
-		generateForm(item);
-		container.show();
-		
-		// fix
-		$('#queryResult').hide();
-	}
-	
-	function hide(){
-		
-	}
-	
-	function generateForm( item ){
-		container.html('');
-		var form = $('<form></form>');
-		
-		_.each(item.attrs, function(value, name){
-			var attributeContainer = $('<div></div>');
-			var label = $('<label>' + name + '</label><br/>');
-			attributeContainer.append(label);
-			_.each(value, function(valueItem, index){
-				var input = $('<input type="text" name="' + name + index + '" value="' + valueItem + '" /><br/>');
-				attributeContainer.append(input);
-			});
-			form.append(attributeContainer);
-		});
-		
-		form.append('<input type="button" name="saveItem" value="save changes" />');
-		container.append(form);
-	}
 	
 	function init(){
 		model = app.queryResult;
 		model.onSelectionChanged(show);
 		container = $('#itemFormContainer');
+		queryResultContainer = $('#queryResult');
+		
+		$('#back').bind('click', hide);
+		
+		$('.deleteAttribute').live('click', deleteAttribute);
+		$('#deleteItem').live('click', deleteItem);
+		$('#itemFormContainer .deleteAttrValue').live('click', deleteAttributeValue);
+		$('#itemFormContainer .add').live('click', addAttributeValue);
+		model.onChanged(hide);
+		
+		form = $('<form></form>');
+		container.append(form);
 	}
 	
+	function show( item ){
+		generateForm(item);
+		container.show();
+		queryResultContainer.hide();
+	}
+	
+	function hide(){
+		form.html('');
+		container.hide();
+		queryResultContainer.show();
+	}
+	
+	function deleteAttribute(){
+		$(this).parents('.attributeForm').slideUp('medium');
+	}
+	
+	function deleteAttributeValue(){
+		$(this).parents('p').slideUp('medium');
+	}
+	
+	function addAttributeValue(){
+		var attributeContainer = $($(this).parents('.attributeForm')[0]);
+		var attributeName = $(attributeContainer.find('label')[0]).html();
+		// TODO: attribute name has to have correct index for name
+		attributeContainer.append(getAttributeValueFormElement(attributeName));
+	}
+	
+	function deleteItem(){
+		if(confirm('Do you really want to delete this item?')){
+			hide();
+		}
+	}
+	
+	function generateForm( item ){
+		form.html('');
+		var html = '';
+		_.each(item.attributes, function(values, name){
+			html += getAttributeForm(name, values);
+		});
+		form.append(html);
+		form.append('<input type="button" name="saveItem" value="save changes" />');
+		container.append(form);
+	}
+	
+	function getAttributeForm(name, values){
+		var html = '<div class="attributeForm">';
+		html += '<p class="attributeFormHeader"><label>'+name+'</label>';
+		html += '<a class="abutton delete deleteAttribute" title="delete this attribute">x</a><a class="abutton add" title="add attribute value">+</a></p>';
+		_.each(values, function(value, index){
+			html += getAttributeValueFormElement(name+index, value);
+		});
+		html += '</div>';
+		return html;
+	}
+	
+	function getAttributeValueFormElement(name, value){
+		value = value ? value : '';
+		return '<p><input type="text" name="'+name+'" value="'+value+'" /><a class="abutton delete deleteAttrValue" title="delete this attribute value">X</a></p>';
+	}
+	
+	
 	return {
-		init: init
+		init: init,
+		hide: hide
 	}
 	
 }());

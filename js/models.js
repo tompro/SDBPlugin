@@ -261,6 +261,10 @@ app.sdb = (function(){
 		sdb.select(query, callback);
 	}
 	
+	function getItem(domain, itemName, callback){
+		sdb.getAttributes(domain, itemName, null, callback);
+	}
+	
 	init();
 	
 	return {
@@ -268,7 +272,8 @@ app.sdb = (function(){
 		listDomains: listDomains,
 		createDomain: createDomain,
 		deleteDomain: deleteDomain,
-		select: select
+		select: select,
+		getItem: getItem
 	};
 	
 }());
@@ -342,22 +347,26 @@ app.queryResult = (function(){
 	
 	var sdb = app.sdb;
 	var result = {};
+	var findDomainExpression = new RegExp("\\\s+from\\\s+`{0,1}([A-Za-z0-9_.-]+)`{0,1}\\\s*");
+	var currentQueryDomain = null;
 	var onChangedCallbacks = [];
 	var selectionChangedCallbacks = [];
 	
-	var selected;
+	var selectedIndex;
+	var selectedItem = null;
 	
 	function reset(){
 		queryResult({});
+		currentQueryDomain = null;
 	}
 	
 	function query( query ){
+      	currentQueryDomain = findDomainExpression.exec(query)[1];
 		sdb.select(query, queryResult);
 	}
 	
 	function queryResult( data ){
 		result = data;
-		console.log(result);
 		app.executeCallbacks(onChangedCallbacks, result.items);
 	}
 	
@@ -376,16 +385,28 @@ app.queryResult = (function(){
 	function selectItem( name ){
 		_.each(result.items, function( item, index ){
 			if(name == item.name){
-				selected = index;
-				app.executeCallbacks(selectionChangedCallbacks, getSelectedItem());
+				selectedIndex = index;
+				selectedItem = null;
+				getSelectedItem(function(resultItem){
+					app.executeCallbacks(selectionChangedCallbacks, resultItem);
+				});
 			}
 		});
 	}
 	
-	function getSelectedItem(){
-		if(selected !== null && selected !== undefined){
-			if(result.items && result.items[selected]){
-				return result.items[selected];
+	function getSelectedItem(callback){
+		if(selectedIndex !== null && selectedIndex !== undefined){
+			if(result.items && result.items[selectedIndex]){
+				if(selectedItem == null){
+					sdb.getItem(currentQueryDomain, result.items[selectedIndex].name, function(resultItem){
+						selectedItem = resultItem;
+						callback(resultItem);
+					});
+				}
+				else{
+					callback(selectedItem);
+				}
+				
 			}
 		}
 	}
